@@ -2,7 +2,6 @@ SHELL:=/bin/bash
 
 BIN=./bin
 LOAD_ENV=source bin/load-dotenv.sh && source bin/construct-additional-env.sh
-LOAD_NODE_ENV=export BABEL_ENV=node && $(LOAD_ENV)
 NBIN=./node_modules/.bin
 WEBPACK=$(NBIN)/webpack --bail
 MOCHA=$(NBIN)/mocha
@@ -34,8 +33,7 @@ dev: badger dist/sw.js ## Run the frontend dev server
 sw: dist/sw.js  ## Compile service worker
 
 fetch:
-	$(LOAD_NODE_ENV) \
-  && node dev/content-fetcher
+	$(LOAD_ENV) && node dev/content-fetcher
 
 dev-static: dist/static-site dist/dev-static/index.js dist/sw.js ## Compile the site to HTML locally and serve
 	ln -fs ../assets-honestly dist/static-site/assets-honestly
@@ -64,8 +62,8 @@ lint: ## Lint Javascript files
 
 
 services-deploy: dist/services.zip ## Upload the publish service to AWS Lambda
-	$(LOAD_NODE_ENV) \
-  && $(SERVERLESS) deploy
+	$(LOAD_ENV) \
+	&& $(SERVERLESS) deploy
 
 publish-service-invoke: ## Invoke the publish service
 	$(LOAD_ENV) \
@@ -102,13 +100,13 @@ dist/services.zip: dist/services
 
 dist/services:
 	export NODE_ENV=production \
-	&& $(LOAD_NODE_ENV) \
+	&& $(LOAD_ENV) \
 	&& $(WEBPACK) --config webpack.lambda.config.js
 
 
 dist/dev-static/index.js:
 	export NODE_ENV=production \
-	&& $(LOAD_NODE_ENV) \
+	&& $(LOAD_ENV) \
 	&& $(WEBPACK) --config webpack.dev.static.config.js
 
 
