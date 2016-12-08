@@ -2,6 +2,7 @@ SHELL:=/bin/bash
 
 BIN=./bin
 LOAD_ENV=source bin/load-dotenv.sh && source bin/construct-additional-env.sh
+LOAD_BABEL_ENV=export BABEL_ENV=node
 NBIN=./node_modules/.bin
 WEBPACK=$(NBIN)/webpack --bail
 MOCHA=$(NBIN)/mocha
