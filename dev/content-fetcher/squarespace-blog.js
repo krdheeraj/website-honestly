@@ -10,19 +10,22 @@ const getUrl = params => {
   return `https://blog.red-badger.com/blog/?&format=json&${getQueryString(params)}`;
 };
 
-const getPosts = async (params = {}) => {
-  const url = getUrl(params);
-  const response = await fetch(url);
-  const json = await response.json();
-  const posts = json.items;
-  if (json.pagination && json.pagination.nextPage) {
-    const newParams = {
-      ...params,
-      offset: json.pagination.nextPageOffset,
-    };
-    return posts.concat(await getPosts(newParams));
-  }
-  return posts;
-};
+const getPosts = params => (new Promise(res => (
+  fetch(getUrl(params))
+    .then(response => response.json())
+    .then(json => {
+      const posts = json.items;
+      if (json.pagination && json.pagination.nextPage) {
+        const newParams = {
+          ...params,
+          offset: json.pagination.nextPageOffset,
+        };
+
+        return getPosts(newParams).then(newPosts => res(posts.concat(newPosts)));
+      }
+
+      return res(posts);
+    })
+)));
 
 export const getFeaturedPosts = () => getPosts({ tag: 'featured' });
