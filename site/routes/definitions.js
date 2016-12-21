@@ -64,7 +64,7 @@ export const routeDefinitions : Array<RouteDefinition> = [
     title: ({ tag }) => (tag ? 'Badgers by' + tag : 'Badgers'),
     key: 'badgers',
     route: 'badgers/{tag}',
-    stateToProps: ({ badgers }, { tag }) => ({ badgers, tag }),
+    stateToProps: ({ badgers }, params = {}) => ({ badgers, tag: params.tag }),
     gen: state => Object.keys(state.badgers.reduce(getTags, {})).map(tag => ({ tag })),
   },
   {
