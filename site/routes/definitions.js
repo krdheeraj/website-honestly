@@ -10,6 +10,11 @@ type RouteDefinition = {|
   render?: (state: Object) => any,
 |}
 
+const getTags = (uniqueTags, badger) => {
+  const newTags = badger.tags.filter(tag => !uniqueTags[tag]);
+  return newTags.reduce((tags, newTag) => ({ ...tags, [newTag]: 1 }), uniqueTags);
+};
+
 export const routeDefinitions : Array<RouteDefinition> = [
   {
     title: 'Home',
@@ -54,6 +59,13 @@ export const routeDefinitions : Array<RouteDefinition> = [
     route: 'about-us/events/{year}/{month}/{date}/{slug}',
     stateToProps: (state, params = {}) => ({ event: state.event[params.slug] }),
     gen: state => state.events.map(({ startDateTime: { date, month, year }, slug }) => ({ date, month, year, slug })),
+  },
+  {
+    title: ({ tag }) => (tag ? 'Badgers by' + tag : 'Badgers'),
+    key: 'badgers',
+    route: 'badgers/{tag}',
+    stateToProps: ({ badgers }, { tag }) => ({ badgers, tag }),
+    gen: state => Object.keys(state.badgers.reduce(getTags, {})).map(tag => ({ tag })),
   },
   {
     title: 'Not found',

@@ -3,7 +3,15 @@ import { compileSite } from '.';
 describe('site/compiler', () => {
   describe('compileSite', () => {
     it('renders all the static pages of the site', () => {
-      const pages = compileSite({ jobs: [], job: {}, contactUsURL: '', featuredBlogPosts: [], events: [], event: {} });
+      const pages = compileSite({
+        jobs: [],
+        job: {},
+        contactUsURL: '',
+        featuredBlogPosts: [],
+        events: [],
+        event: {},
+        badgers: [],
+      });
 
       expect(pages.length).to.equal(8);
       expect(pages[0].path).to.equal('index.html');
@@ -46,6 +54,7 @@ describe('site/compiler', () => {
         featuredBlogPosts: [],
         events: [],
         event: {},
+        badgers: [],
       });
 
       expect(pages.length).to.equal(10);
@@ -76,6 +85,7 @@ describe('site/compiler', () => {
         ],
         events: [],
         event: {},
+        badgers: [],
       });
 
       expect(pages.length).to.equal(8);
@@ -133,6 +143,7 @@ describe('site/compiler', () => {
           'upcoming-event': upcomingEvent,
           'designing-in-cross-functional-teams': designingEvent,
         },
+        badgers: [],
       });
 
       expect(pages.length).to.equal(10);
@@ -141,6 +152,47 @@ describe('site/compiler', () => {
       expect(pages[8].body).to.match(/Upcoming Event/);
       expect(pages[9].path).to.equal('about-us/events/2016/08/03/designing-in-cross-functional-teams/index.html');
       expect(pages[9].body).to.match(/Designing in cross-functional teams/);
+    });
+
+    it('renders the dynamic badger pages of the site', () => {
+      const pages = compileSite({
+        jobs: [],
+        job: {},
+        contactUsURL: '',
+        featuredBlogPosts: [],
+        events: [],
+        event: {},
+        badgers: [{
+          firstName: 'Alex',
+          lastName: 'Savin',
+          tags: [
+            'Engineering',
+            'Leadership',
+          ],
+        }],
+      });
+
+      expect(pages.length).to.equal(10);
+      expect(pages[0].path).to.equal('index.html');
+      expect(pages[0].body).to.match(/We work with you to deliver digital products/);
+      expect(pages[1].path).to.equal('what-we-do/index.html');
+      expect(pages[1].body).to.match(/How do we do the thing right\?/);
+      expect(pages[2].path).to.equal('about-us/index.html');
+      expect(pages[2].body).to.match(/This is what we believe/);
+      expect(pages[3].path).to.equal('about-us/join-us/index.html');
+      expect(pages[3].body).to.match(/Join us/);
+      expect(pages[4].path).to.equal('about-us/events/index.html');
+      expect(pages[4].body).to.match(/React London 2017/);
+      expect(pages[5].path).to.equal('404.html');
+      expect(pages[5].body).to.match(/Whaaaaaat!\?/);
+      expect(pages[6].path).to.equal('50x/index.html');
+      expect(pages[6].body).to.match(/Oops!/);
+      expect(pages[7].path).to.equal('offline/index.html');
+      expect(pages[7].body).to.match(/No internet connection/);
+      expect(pages[8].path).to.equal('badgers/Engineering/index.html');
+      expect(pages[8].body).to.match(/Engineering/);
+      expect(pages[9].path).to.equal('badgers/Leadership/index.html');
+      expect(pages[9].body).to.match(/Leadership/);
     });
   });
 });
