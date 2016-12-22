@@ -21,6 +21,8 @@ const getTags = (uniqueTags, badger) => (
     }, uniqueTags)
 );
 
+const genBadgers = state => Object.keys(state.badgers.reduce(getTags, { everyone: 1 }));
+
 export const routeDefinitions : Array<RouteDefinition> = [
   {
     title: 'Home',
@@ -67,12 +69,12 @@ export const routeDefinitions : Array<RouteDefinition> = [
     gen: state => state.events.map(({ startDateTime: { date, month, year }, slug }) => ({ date, month, year, slug })),
   },
   {
-    title: ({ tag }) => (tag ? 'Badgers by' + tag : 'Badgers'),
+    title: ({ tag }) => 'Meet our team' + (tag ? ` (${tag})` : ''),
     key: 'badgers',
     route: 'about-us/people/{tag?}',
     defaults: { tag: 'everyone' },
     stateToProps: ({ badgers }, params = {}) => ({ badgers, tag: params.tag }),
-    gen: state => Object.keys(state.badgers.reduce(getTags, { everyone: 1 })).map(tag => ({ tag: tag.toLowerCase() })),
+    gen: state => genBadgers(state).map(tag => ({ tag: tag.toLowerCase() })),
   },
   {
     title: 'Not found',
