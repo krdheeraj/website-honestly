@@ -10,10 +10,16 @@ type RouteDefinition = {|
   render?: (state: Object) => any,
 |}
 
-const getTags = (uniqueTags, badger) => {
-  const newTags = badger.tags.filter(tag => !uniqueTags[tag]);
-  return newTags.reduce((tags, newTag) => ({ ...tags, [newTag]: 1 }), uniqueTags);
-};
+const getTags = (uniqueTags, badger) => (
+  badger.tags
+    .reduce((tags, tag) => {
+      let newTags = tags;
+      if (!tags[tag]) {
+        newTags = { ...tags, [tag]: 1 };
+      }
+      return newTags;
+    }, uniqueTags)
+);
 
 export const routeDefinitions : Array<RouteDefinition> = [
   {
