@@ -13,7 +13,7 @@ describe('site/compiler', () => {
         badgers: [],
       });
 
-      expect(pages.length).to.equal(8);
+      expect(pages.length).to.equal(9);
       expect(pages[0].path).to.equal('index.html');
       expect(pages[0].body).to.match(/We work with you to deliver digital products/);
       expect(pages[1].path).to.equal('what-we-do/index.html');
@@ -30,6 +30,8 @@ describe('site/compiler', () => {
       expect(pages[6].body).to.match(/Oops!/);
       expect(pages[7].path).to.equal('offline/index.html');
       expect(pages[7].body).to.match(/No internet connection/);
+      expect(pages[8].path).to.equal('about-us/people/index.html');
+      expect(pages[8].body).to.match(/everyone/);
     });
 
     it('renders the dynamic jobs pages of the site', () => {
@@ -57,7 +59,7 @@ describe('site/compiler', () => {
         badgers: [],
       });
 
-      expect(pages.length).to.equal(10);
+      expect(pages.length).to.equal(11);
       expect(pages[8].path).to.equal('about-us/join-us/software-engineer/index.html');
       expect(pages[8].body).to.match(/Software Engineer/);
       expect(pages[9].path).to.equal('about-us/join-us/ux-designer/index.html');
@@ -88,7 +90,7 @@ describe('site/compiler', () => {
         badgers: [],
       });
 
-      expect(pages.length).to.equal(8);
+      expect(pages.length).to.equal(9);
       expect(pages[0].path).to.equal('index.html');
       expect(pages[0].body).to.match(/Service Worker support on Red Badgers new website/);
       expect(pages[0].body).to.match(/Git and Github in Plain English/);
@@ -146,7 +148,7 @@ describe('site/compiler', () => {
         badgers: [],
       });
 
-      expect(pages.length).to.equal(10);
+      expect(pages.length).to.equal(11);
       expect(pages[7].body).to.match(/No internet connection/);
       expect(pages[8].path).to.equal('about-us/events/2017/01/31/upcoming-event/index.html');
       expect(pages[8].body).to.match(/Upcoming Event/);
@@ -172,7 +174,7 @@ describe('site/compiler', () => {
         }],
       });
 
-      expect(pages.length).to.equal(10);
+      expect(pages.length).to.equal(11);
       expect(pages[0].path).to.equal('index.html');
       expect(pages[0].body).to.match(/We work with you to deliver digital products/);
       expect(pages[1].path).to.equal('what-we-do/index.html');
@@ -189,10 +191,12 @@ describe('site/compiler', () => {
       expect(pages[6].body).to.match(/Oops!/);
       expect(pages[7].path).to.equal('offline/index.html');
       expect(pages[7].body).to.match(/No internet connection/);
-      expect(pages[8].path).to.equal('badgers/Engineering/index.html');
-      expect(pages[8].body).to.match(/Engineering/);
-      expect(pages[9].path).to.equal('badgers/Leadership/index.html');
-      expect(pages[9].body).to.match(/Leadership/);
+      expect(pages[8].path).to.equal('about-us/people/index.html');
+      expect(pages[8].body).to.match(/everyone/);
+      expect(pages[9].path).to.equal('about-us/people/engineering/index.html');
+      expect(pages[9].body).to.match(/engineering/);
+      expect(pages[10].path).to.equal('about-us/people/leadership/index.html');
+      expect(pages[10].body).to.match(/leadership/);
     });
   });
 });
