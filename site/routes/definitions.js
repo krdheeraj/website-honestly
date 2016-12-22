@@ -12,13 +12,7 @@ type RouteDefinition = {|
 
 const getTags = (uniqueTags, badger) => (
   badger.tags
-    .reduce((tags, tag) => {
-      let newTags = tags;
-      if (!tags[tag]) {
-        newTags = { ...tags, [tag]: 1 };
-      }
-      return newTags;
-    }, uniqueTags)
+    .reduce((tags, tag) => (!tags[tag] ? { ...tags, [tag]: 1 } : tags), uniqueTags)
 );
 
 const genBadgers = state => Object.keys(state.badgers.reduce(getTags, { everyone: 1 }));
