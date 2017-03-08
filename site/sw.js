@@ -1,23 +1,44 @@
 /* disable eslint */
 
-const CACHE_NAME = 'v1';
-const OFFLINE_URL = 'offline';
+import { StateNavigator } from 'navigation';
+import { routeDefinitions } from './routes/definitions';
+
+const CACHE_NAME = 'v2';
+const HOMEPAGE_URL = '/';
+const OFFLINE_URL = '/offline';
+
+const stateNavigator = new StateNavigator(routeDefinitions);
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll([HOMEPAGE_URL, OFFLINE_URL]);
+    })
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keyList => {
+      return Promise.all(keyList.map(key => {
+        if (key !== CACHE_NAME) {
+          return caches.delete(key);
+        }
+        return null;
+      }));
+    })
+  );
+});
 
 self.addEventListener('fetch', event => {
   const { url } = event.request;
   event.respondWith(
     fetch(event.request)
       .then(res => {
-        // Check if we received a valid response
         if (!res || res.status !== 200 || res.type !== 'basic') {
           return res;
         }
-
-        // IMPORTANT: Clone the response. A response is a stream
-        // and because we want the browser to consume the response
-        // as well as the cache consuming the response, we need
-        // to clone it so we have two streams.
-        if (/\.(css|js|png)$/i.test(url)) {
+        if (/\.(css|js|png|jpg|woff2)$/i.test(url)) {
           const responseToCache = res.clone();
 
           caches.open(CACHE_NAME)
@@ -25,21 +46,12 @@ self.addEventListener('fetch', event => {
               cache.put(event.request, responseToCache);
             });
         }
-
         return res;
       }).catch(() => {
-        // This ONLY happens when fetch() throws an exception, so it will NOT
-        // BE TRIGGERED by 4xx/5xx errors, only by things like disconnects.
-        return caches.match(event.request)
-          .then(response => {
-            // Cache hit - return response
-            if (response) {
-              return response;
-            }
-
-            // No cache available, return offline page
-            return caches.match(OFFLINE_URL);
-          });
+        if (!/\./.test(url)) {
+          const navigationLink = stateNavigator.parseNavigationLink(url);
+          return caches.match(navigationLink ? HOMEPAGE_URL : OFFLINE_URL);
+        }
       })
   );
 });
