@@ -4,8 +4,8 @@ import { StateNavigator } from 'navigation';
 import { routeDefinitions } from './routes/definitions';
 
 const CACHE_NAME = 'v2';
-const HOMEPAGE_URL = '/';
-const OFFLINE_URL = '/offline';
+const HOMEPAGE_URL = `${process.env.URL_BASENAME || ''}/`;
+const OFFLINE_URL = `${process.env.URL_BASENAME || ''}/offline`;
 
 const stateNavigator = new StateNavigator(routeDefinitions);
 
