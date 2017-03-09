@@ -4,9 +4,8 @@ import { StateNavigator } from 'navigation';
 import { routeDefinitions } from './routes/definitions';
 
 const CACHE_NAME = 'v2';
-const urlPrefix = location.pathname.slice(0, -6);
-const HOMEPAGE_URL = urlPrefix + '/';
-const OFFLINE_URL = urlPrefix + '/offline';
+const HOMEPAGE_URL = '/';
+const OFFLINE_URL = '/offline';
 
 const stateNavigator = new StateNavigator(routeDefinitions);
 
@@ -49,9 +48,10 @@ self.addEventListener('fetch', event => {
         }
         return res;
       }).catch(() => {
-        const link = url.substring(location.origin.length);
+        const prefixLength = location.href.slice(0, -6).length;
+        const link = url.substring(prefixLength);
         if (!/\./.test(link)) {
-          const navigationLink = stateNavigator.parseNavigationLink(link);
+          const navigationLink = stateNavigator.parseLink(link);
           return caches.match(navigationLink ? HOMEPAGE_URL : OFFLINE_URL);
         }
       })
