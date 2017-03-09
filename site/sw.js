@@ -57,6 +57,8 @@ self.addEventListener('fetch', event => {
           } catch (e) {
             return caches.match(OFFLINE_URL);
           }
+        } else {
+          return caches.match(event.request);
         }
       })
   );
