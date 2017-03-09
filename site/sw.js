@@ -51,8 +51,12 @@ self.addEventListener('fetch', event => {
       }).catch(() => {
         const link = url.substring(urlPrefix.length);
         if (!/\./.test(link)) {
-          const navigationLink = stateNavigator.parseLink(link);
-          return caches.match(navigationLink ? HOMEPAGE_URL : OFFLINE_URL);
+          try {
+            stateNavigator.parseLink(link);
+            return caches.match(HOMEPAGE_URL);
+          } catch (e) {
+            return caches.match(OFFLINE_URL);
+          }
         }
       })
   );
