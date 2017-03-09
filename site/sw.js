@@ -4,13 +4,13 @@ import { StateNavigator } from 'navigation';
 import { routeDefinitions } from './routes/definitions';
 
 const CACHE_NAME = 'v2';
-const HOMEPAGE_URL = '/';
-const OFFLINE_URL = '/offline';
+const urlPrefix = location.pathname.slice(0, -6);
+const HOMEPAGE_URL = urlPrefix + '/';
+const OFFLINE_URL = urlPrefix + '/offline';
 
 const stateNavigator = new StateNavigator(routeDefinitions);
 
 self.addEventListener('install', event => {
-  console.log(location.pathname);
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll([HOMEPAGE_URL, OFFLINE_URL]);
