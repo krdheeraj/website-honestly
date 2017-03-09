@@ -49,7 +49,7 @@ self.addEventListener('fetch', event => {
         }
         return res;
       }).catch(() => {
-        if (!/\./.test(url)) {
+        if (!/\./.test(url.substring(location.origin.length))) {
           const navigationLink = stateNavigator.parseNavigationLink(url);
           return caches.match(navigationLink ? HOMEPAGE_URL : OFFLINE_URL);
         }
