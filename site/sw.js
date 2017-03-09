@@ -49,8 +49,9 @@ self.addEventListener('fetch', event => {
         }
         return res;
       }).catch(() => {
-        if (!/\./.test(url.substring(location.origin.length))) {
-          const navigationLink = stateNavigator.parseNavigationLink(url);
+        const link = url.substring(location.origin.length);
+        if (!/\./.test(link)) {
+          const navigationLink = stateNavigator.parseNavigationLink(link);
           return caches.match(navigationLink ? HOMEPAGE_URL : OFFLINE_URL);
         }
       })
