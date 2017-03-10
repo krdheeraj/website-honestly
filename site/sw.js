@@ -6,7 +6,7 @@ import { routeDefinitions } from './routes/definitions';
 const CACHE_NAME = 'v2';
 const urlPrefix = location.href.slice(0, -6);
 const HOMEPAGE_URL = urlPrefix + '/';
-const OFFLINE_URL = urlPrefix + '/offline';
+const OFFLINE_URL = urlPrefix + '/offline/';
 
 const stateNavigator = new StateNavigator(routeDefinitions);
 
