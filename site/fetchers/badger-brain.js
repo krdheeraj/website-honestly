@@ -24,6 +24,9 @@ const sortEvents = list =>
 const selectValidEvents = list =>
   list.filter(listItem => !!listItem.startDateTime && !!listItem.startDateTime.iso);
 
+const sortWebinars = list =>
+  list.sort((a, b) => new Date(b.startDateTime.iso) - new Date(a.startDateTime.iso));
+
 const getCategories = badgers => {
   const categoriesObj = badgers.reduce(
     (uniqueCategories, badger) =>
@@ -157,16 +160,40 @@ export function getData() {
         }
         order
       }
+      allWebinars {
+        slug
+        title
+        startDateTime {
+          ${dateTimeFields}
+        }
+        endDateTime {
+          ${dateTimeFields}
+        }
+        featureImageFilename
+        body {
+          type
+          text
+        }
+        webinarKey
+        speakers {
+          slug
+          firstName
+          lastName
+          jobTitle
+          primaryImageUrl
+        }
+      }
     }
   `;
 
   return fetch(badgerBrainEndpoint, getRequestOptions(body))
     .then(handleErrors)
     .then(response => response.json())
-    .then(({ data: { allEvents, allBadgers, allQnA } }) => ({
+    .then(({ data: { allEvents, allBadgers, allQnA, allWebinars } }) => ({
       events: sortEvents(selectValidEvents(allEvents)),
       badgers: sortBadgers(allBadgers),
       categories: getCategories(allBadgers),
       qAndAs: selectValidQandAs(allQnA),
+      webinars: sortWebinars(allWebinars),
     }));
 }

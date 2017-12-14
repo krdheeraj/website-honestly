@@ -29,7 +29,7 @@ const getSiteState = () =>
     instagramPosts: getPosts(fetch),
     data: getData(),
     ...initialState,
-  }).then(({ data: { events, badgers, categories, qAndAs }, ...state }) => ({
+  }).then(({ data: { events, badgers, categories, qAndAs, webinars }, ...state }) => ({
     ...state,
     job: toDict(state.jobs, j => j.slug),
     events,
@@ -38,6 +38,7 @@ const getSiteState = () =>
     badger: toDict(badgers, b => b.slug),
     categories,
     qAndAs,
+    webinars,
   }));
 
 export default getSiteState;
