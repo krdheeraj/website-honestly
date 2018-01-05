@@ -6,6 +6,7 @@ import CaseStudyRetailerSlice from './case-study-retailer-slice';
 import CaseStudyCamdenSlice from './case-study-camden-slice';
 import CaseStudyFtSlice from './case-study-ft-slice';
 import CaseStudyFortnumSlice from './case-study-fortnum-and-mason-slice';
+import CaseStudyFortnumDigitalTransformationSlice from './case-study-fortnum-and-mason-digital-transformation-slice';
 import CaseStudySkySlice from './case-study-sky-slice';
 import ClientLogosSlice from './client-logos-slice';
 import CaseStudyCell from './case-study-cell';
@@ -42,9 +43,30 @@ export default function CaseStudies() {
           <CaseStudyCamdenSlice />
           <CaseStudyFtSlice />
           <CaseStudyFortnumSlice />
+          <CaseStudyFortnumDigitalTransformationSlice />
           <CaseStudySkySlice />
           <ClientLogosSlice />
           <div className={styles.grid}>
+            <div className={styles.gridRow}>
+              <CaseStudyCell
+                clientName={'BBC'}
+                clientLogo={BbcLogo}
+                headerText={'Delivering a better customer experience, faster'}
+                descriptionText={
+                  'How the rapid prototyping model helped the BBC to uncover new ways to engage its audience.'
+                }
+                routeKey="bbcCaseStudy"
+              />
+              <CaseStudyCell
+                clientName={'Sky'}
+                clientLogo={SkyLogo}
+                headerText={'Helping customers help themselves'}
+                descriptionText={
+                  'Enabling Sky to deliver continual improvement across customer services'
+                }
+                routeKey="skyCaseStudy"
+              />
+            </div>
             <div className={styles.gridRow}>
               <CaseStudyCell
                 clientName={'Haller'}
@@ -54,7 +76,7 @@ export default function CaseStudies() {
                 descriptionText={
                   'Red Badger teamed up with the Haller Foundation on a pro-bono basis to develop a mobile application which helps Kenyan farmers.'
                 }
-                linkUrl={'/our-work/case-study/haller/'}
+                routeKey="hallerCaseStudy"
               />
               <CaseStudyCell
                 clientName={'BMW'}
@@ -64,27 +86,7 @@ export default function CaseStudies() {
                 descriptionText={
                   'Pushing the boundaries of HTML5 technology to deliver a multi-platform 3D tour of the BMW Museum.'
                 }
-                linkUrl={'/our-work/case-study/bmw/'}
-              />
-            </div>
-            <div className={styles.gridRow}>
-              <CaseStudyCell
-                clientName={'BBC'}
-                clientLogo={BbcLogo}
-                headerText={'Delivering a better customer experience, faster'}
-                descriptionText={
-                  'How the rapid prototyping model helped the BBC to uncover new ways to engage its audience.'
-                }
-                linkUrl={'/our-work/case-study/bbc-now/'}
-              />
-              <CaseStudyCell
-                clientName={'Sky'}
-                clientLogo={SkyLogo}
-                headerText={'Helping customers help themselves'}
-                descriptionText={
-                  'Enabling Sky to deliver continual improvement across customer services'
-                }
-                linkUrl={'/our-work/case-study/sky/'}
+                routeKey="bmwCaseStudy"
               />
             </div>
           </div>

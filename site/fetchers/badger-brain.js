@@ -1,3 +1,4 @@
+import marked from 'marked';
 import fetch from 'node-fetch';
 import handleErrors from './handle-errors';
 
@@ -23,6 +24,15 @@ const sortEvents = list =>
 
 const selectValidEvents = list =>
   list.filter(listItem => !!listItem.startDateTime && !!listItem.startDateTime.iso);
+
+const prepareEventsBodyHtml = list =>
+  list.map(event => ({
+    ...event,
+    body: event.body.map(part => ({
+      ...part,
+      text: marked(part.text),
+    })),
+  }));
 
 const sortWebinars = list =>
   list.sort((a, b) => new Date(b.startDateTime.iso) - new Date(a.startDateTime.iso));
@@ -190,7 +200,7 @@ export function getData() {
     .then(handleErrors)
     .then(response => response.json())
     .then(({ data: { allEvents, allBadgers, allQnA, allWebinars } }) => ({
-      events: sortEvents(selectValidEvents(allEvents)),
+      events: sortEvents(prepareEventsBodyHtml(selectValidEvents(allEvents))),
       badgers: sortBadgers(allBadgers),
       categories: getCategories(allBadgers),
       qAndAs: selectValidQandAs(allQnA),

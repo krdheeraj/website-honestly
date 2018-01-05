@@ -3,6 +3,13 @@ import React, { PropTypes } from 'react';
 import { StateNavigator } from 'navigation';
 import { NavigationLink } from 'navigation-react';
 
+export type LinkProps = {
+  to: string,
+  children?: Node,
+  activeCssClass?: string,
+  target?: string,
+};
+
 export default class Link extends React.Component {
   static contextTypes = {
     // The stateNavigator is provided by navigation-react and provides
@@ -10,27 +17,53 @@ export default class Link extends React.Component {
     stateNavigator: PropTypes.instanceOf(StateNavigator),
   };
 
-  static propTypes = {
-    to: PropTypes.string.isRequired,
-    children: PropTypes.node.isRequired,
-    childActiveCssClass: PropTypes.string,
-  };
+  constructor(props: LinkProps) {
+    super(props);
+
+    this.shouldNavigate = this.shouldNavigate.bind(this);
+  }
 
   getStateNavigator(): StateNavigator {
     return this.context.stateNavigator;
   }
 
+  shouldNavigate: () => boolean;
+  props: LinkProps;
+
+  /**
+   * Checks if the currently active state is a child (direct or nested) of
+   * the state specified in the `to` property. Returns true, if this is the
+   * case; otherwise false.
+   */
   hasActiveChild(): boolean {
-    const currentStateParent = this.getStateNavigator().stateContext.state.parentKey;
-    return currentStateParent === this.props.to;
+    const stateNavigator = this.getStateNavigator();
+    let state = stateNavigator.stateContext.state;
+    while (state.parentKey) {
+      if (state.parentKey === this.props.to) {
+        return true;
+      }
+
+      state = stateNavigator.states[state.parentKey];
+    }
+
+    return false;
+  }
+
+  shouldNavigate(): boolean {
+    return this.props.target !== '_blank';
   }
 
   render() {
-    const { to, childActiveCssClass, ...rest } = this.props;
-    const appliedCssClass = this.hasActiveChild() ? childActiveCssClass : '';
+    const { to, ...rest } = this.props;
+    const appliedCssClass = this.hasActiveChild() ? this.props.activeCssClass : '';
 
     return (
-      <NavigationLink stateKey={to} className={appliedCssClass} {...rest}>
+      <NavigationLink
+        stateKey={to}
+        className={appliedCssClass}
+        navigating={this.shouldNavigate}
+        {...rest}
+      >
         {this.props.children}
       </NavigationLink>
     );
