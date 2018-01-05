@@ -4,26 +4,30 @@ import InlineSVG from 'svg-inline-react';
 
 import styles from './style.css';
 import arrowSVG from '../../../../../assets/images/SVG/arrow.svg';
+import Link from '../../../../components/link';
 
 type WhatToReadNextSliceProps = {
-  details: Object,
+  name: string,
+  tagline: string,
+  image: string,
+  linkKey: string,
 };
 
-const WhatToReadNextSlice = ({ details }: WhatToReadNextSliceProps) => {
+const WhatToReadNextSlice = ({ name, tagline, image, linkKey }: WhatToReadNextSliceProps) => {
   return (
-    <div key={details.name} className={styles.whatNext__tile}>
+    <div className={styles.whatNext__tile}>
       <figure>
-        <a href={details.link}>
-          <img src={details.image} alt={details.name} className={styles.whatNext__image} />
-        </a>
-        <figcaption className={styles.whatNext__caption}>{details.name}</figcaption>
+        <Link to={linkKey}>
+          <img src={image} alt={name} className={styles.whatNext__image} />
+        </Link>
+        <figcaption className={styles.whatNext__caption}>{name}</figcaption>
       </figure>
-      <a href={details.link} className={styles.whatNext__link}>
+      <Link to={linkKey} className={styles.whatNext__link}>
         <h2 className={styles.whatNext__title}>
-          {details.tagline}
+          {tagline}
           <InlineSVG src={arrowSVG} className={styles.whatNext__arrow} />
         </h2>
-      </a>
+      </Link>
     </div>
   );
 };
