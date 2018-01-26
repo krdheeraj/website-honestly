@@ -114,7 +114,7 @@ reflects the current state of master.
 
 There is only one staging lambda function instance, so there is no guarantee
 that the correct version will be currently deployed when viewing a branch
-preview. This matters if you are testing the "contact us" form, for example.
+preview.
 
 Deploys to the live prod environment are done by starting a parameterised build
 on CircleCI that does the deploy + invoke process for the production lambda
